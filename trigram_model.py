@@ -5,9 +5,7 @@ import random
 import os
 import os.path
 """
-COMS W4705 - Natural Language Processing - Fall 2023 
-Programming Homework 1 - Trigram Language Models
-Daniel Bauer
+Trigram Language Models
 """
 
 def corpus_reader(corpusfile, lexicon=None): 
@@ -31,9 +29,7 @@ def get_lexicon(corpus):
 
 def get_ngrams(sequence, n):
     """
-    COMPLETE THIS FUNCTION (PART 1)
-    Given a sequence, this function should return a list of n-grams, where each n-gram is a Python tuple.
-    This should work for arbitrary values of n >= 1 
+    Given a sequence, this function returns a list of n-grams, where each n-gram is a Python tuple.
     """
     sequence=["START"]*max(1,n-1)+sequence+["STOP"]
     if n==1:
@@ -60,8 +56,7 @@ class TrigramModel(object):
 
     def count_ngrams(self, corpus):
         """
-        COMPLETE THIS METHOD (PART 2)
-        Given a corpus iterator, populate dictionaries of unigram, bigram,
+        Given a corpus iterator, populates dictionaries of unigram, bigram,
         and trigram counts. 
         """
         if len(self.lexicon)==0: return
@@ -87,7 +82,6 @@ class TrigramModel(object):
 
     def raw_trigram_probability(self,trigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) trigram probability
         """
         if trigram[:2]==('START','START'):
@@ -98,35 +92,28 @@ class TrigramModel(object):
 
     def raw_bigram_probability(self, bigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) bigram probability
         """
         return self.bigramcounts[bigram]/self.unigramcounts[tuple(list(bigram)[:1])] if bigram in self.bigramcounts else 0.0
     
     def raw_unigram_probability(self, unigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) unigram probability.
         """
 
-        #hint: recomputing the denominator every time the method is called
-        # can be slow! You might want to compute the total number of words once, 
-        # store in the TrigramModel instance, and then re-use it.  
         if unigram==('START',):
             return 1.0
         return self.unigramcounts[unigram]/self.totalwords if unigram in self.unigramcounts else 0.0
 
     def generate_sentence(self,t=20): 
         """
-        COMPLETE THIS METHOD (OPTIONAL)
-        Generate a random sentence from the trigram model. t specifies the
+        Generates a random sentence from the trigram model. t specifies the
         max length, but the sentence may be shorter if STOP is reached.
         """
         return result            
 
     def smoothed_trigram_probability(self, trigram):
         """
-        COMPLETE THIS METHOD (PART 4)
         Returns the smoothed trigram probability (using linear interpolation). 
         """
         lambda1 = 1/3.0
@@ -136,7 +123,6 @@ class TrigramModel(object):
         
     def sentence_logprob(self, sentence):
         """
-        COMPLETE THIS METHOD (PART 5)
         Returns the log probability of an entire sequence.
         """
         trigrams=get_ngrams(sentence,3)
@@ -144,7 +130,6 @@ class TrigramModel(object):
 
     def perplexity(self, corpus):
         """
-        COMPLETE THIS METHOD (PART 6) 
         Returns the log probability of an entire sequence.
         """
         l=0
